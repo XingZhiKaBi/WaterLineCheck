@@ -6,6 +6,7 @@ import csv
 videoName = 'bandicam 2022-06-30 16-14-29-492.mp4'
 txtName = 'bandicam 2022-06-30 16-14-29-492_Hongsheng Li.txt'
 sysPath = ['./data/time_txt', './data/video', './data/train_csv']
+fullPath = "/Users/xiaomi/PycharmProjects/MachineLearning/WaterLineCheck/data/video"
 
 originName = (txtName.split("_"))[0]
 # print(originName)
@@ -74,18 +75,15 @@ for i in range(numLine):
         按照标注分类
     """
     if label[i] == "合格":
-        videoWriter = cv2.VideoWriter(sysPath[1] + "/positive/" + str(i+1) + ".mp4",
+        videoWriter = cv2.VideoWriter(sysPath[1] + "/positive/" + originName + "_" + str(i + 1) + ".mp4",
                                       cv2.VideoWriter_fourcc('m', 'p', '4', 'v'),
                                       FPS, (320, 240))
-        csvWriter.writerow(["/Users/xiaomi/PycharmProjects/MachineLearning" +
-                            "/WaterLineCheck/data/video" +
-                            "/positive/" + str(i+1) + ".mp4 1"])
+        csvWriter.writerow([fullPath + "/positive/" + originName + "_" + str(i + 1) + ".mp4 1"])
     elif label[i] == "不合格":
-        videoWriter = cv2.VideoWriter(sysPath[1] + "/negative/" + str(i+1) + ".mp4",
+        videoWriter = cv2.VideoWriter(sysPath[1] + "/negative/" + originName + "_" + str(i + 1) + ".mp4",
                                       cv2.VideoWriter_fourcc('m', 'p', '4', 'v'),
                                       FPS, (320, 240))
-        csvWriter.writerow(["/Users/xiaomi/PycharmProjects/MachineLearning" +
-                            "/WaterLineCheck/data/video" + "/negative/" + str(i+1) + ".mp4 0"])
+        csvWriter.writerow([fullPath + "/negative/" + originName + "_" + str(i + 1) + ".mp4 0"])
 
     """
         开始裁剪
