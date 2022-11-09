@@ -2,13 +2,14 @@ import os
 import cv2
 import math
 import csv
+import shutil
 
 videoName = 'bandicam 2022-06-30 16-14-29-492.mp4'
 txtName = 'bandicam 2022-06-30 16-14-29-492_Hongsheng Li.txt'
 sysPath = ['./data/time_txt', './data/video', './data/train_csv']
-fullPath = "/Users/xiaomi/PycharmProjects/MachineLearning/WaterLineCheck/data/video"
+fullPath = "/home/xr/AI/DATA/video"
 
-originName = (txtName.split("_"))[0]
+originName = (txtName.split("_"))[0].replace(' ', '-')
 # print(originName)
 path = os.path.join(sysPath[0], txtName)
 print("读取文件:", txtName)
@@ -60,7 +61,14 @@ size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
 # totalFrame = cap.get(cv2.CAP_PROP_FRAME_COUNT) # 获取总帧数
 # print("总帧数为：", totalFrame)
 
-for i in range(numLine):
+"""将文件夹清空"""
+# shutil.rmtree(sysPath[1] + "/positive/")
+# os.mkdir(sysPath[1] + "/positive/")
+# shutil.rmtree(sysPath[1] + "/negative/")
+# os.mkdir(sysPath[1] + "/negative/")
+# print("清空文件夹！")
+
+for i in range(40, numLine):
     """
         定义剪切视频所需要的参数
     """
@@ -75,15 +83,15 @@ for i in range(numLine):
         按照标注分类
     """
     if label[i] == "合格":
-        videoWriter = cv2.VideoWriter(sysPath[1] + "/positive/" + originName + "_" + str(i + 1) + ".mp4",
+        videoWriter = cv2.VideoWriter(sysPath[1] + "/positive/" + originName + "-" + str(i + 1) + ".mp4",
                                       cv2.VideoWriter_fourcc('m', 'p', '4', 'v'),
                                       FPS, (320, 240))
-        csvWriter.writerow([fullPath + "/positive/" + originName + "_" + str(i + 1) + ".mp4 1"])
+        csvWriter.writerow([fullPath + "/positive/" + originName + "-" + str(i + 1) + ".mp4 1"])
     elif label[i] == "不合格":
-        videoWriter = cv2.VideoWriter(sysPath[1] + "/negative/" + originName + "_" + str(i + 1) + ".mp4",
+        videoWriter = cv2.VideoWriter(sysPath[1] + "/negative/" + originName + "-" + str(i + 1) + ".mp4",
                                       cv2.VideoWriter_fourcc('m', 'p', '4', 'v'),
                                       FPS, (320, 240))
-        csvWriter.writerow([fullPath + "/negative/" + originName + "_" + str(i + 1) + ".mp4 0"])
+        csvWriter.writerow([fullPath + "/negative/" + originName + "-" + str(i + 1) + ".mp4 0"])
 
     """
         开始裁剪
@@ -106,8 +114,8 @@ for i in range(numLine):
             print("done...")
             break
 
-    if i == 7:
-        # 设置断点，控制运行时间
-        break
+    # if i == 39:
+    #     # 设置断点，控制运行时间
+    #     break
 
 file.close()
